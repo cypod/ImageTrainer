@@ -1,0 +1,36 @@
+# Local/private deployment plans and runbooks.
+docs/internal/
+*.local.md
+
+# Credentials and machine-local auth.
+.env
+.env.*
+.netrc
+credentials
+credentials.*
+id_rsa
+id_ed25519
+*.pem
+*.key
+*.p12
+*.pfx
+**/.aws
+**/.ssh
+
+# Large runtime artifacts.
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.onnx
+*.gguf
+data/
+datasets/
+models/
+outputs/
+
+# Caches and generated files.
+**/.cache/
+**/__pycache__/
+*.py[cod]

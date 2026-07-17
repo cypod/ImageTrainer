@@ -1,0 +1,33 @@
+name: Docker build test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  docker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+      - uses: docker/setup-buildx-action@v3
+      - name: Build linux/amd64 image locally
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: image-trainer:ci
+          build-args: |
+            PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: CPU-only import smoke test
+        run: docker run --rm image-trainer:ci verify-gpu --allow-no-cuda
